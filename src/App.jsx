@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home/Home';
+import Home from './Pages/Home/Home';
 import Reports from './pages/Reports/Reports';
 import Settings from './pages/Settings/Settings';
 import Header from './component/Header/Header';
@@ -10,12 +10,6 @@ function App() {
   return (
     <Router>
       <div className="App">
-        
-        <Header />
-        <Hero/>
-        <Dashboard/>
-          <LineChart/>
-        
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/reports" element={<Reports />} />
