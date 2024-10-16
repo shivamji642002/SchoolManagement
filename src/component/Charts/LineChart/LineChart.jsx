@@ -13,7 +13,7 @@ export const monthWiseData = [
   ["July", 1030, 540],
   ["August", 1030, 540],
   ["September", 1030, 540],
-  ["October", 1030, 540],
+  ["October", 1030, 1540],
   ["November", 1030, 540],
   ["December", 1030, 540],
 ];
@@ -21,10 +21,13 @@ export const monthWiseData = [
 // Year-wise data
 export const yearWiseData = [
   ["YEAR", "TOTAL EXPENSE", "TOTAL COLLECTION"],
-  ["2020", 12000, 9000],
-  ["2021", 15000, 12000],
-  ["2022", 14000, 11500],
+  ["2018", 14000, 11500],
+  ["2019", 16000, 18000],
+  ["2020", 12000, 19000],
+  ["2021", 15000, 16000],
+  ["2022", 1000, 11500],
   ["2023", 16000, 13000],
+  ["2024", 14000, 11500],
 ];
 
 export const options = {
@@ -94,11 +97,11 @@ export default function LineChart() {
           title: isMonthWise
             ? "Company Performance (Month-wise)"
             : "Company Performance (Year-wise)",
-            colors: ['#FF5733', '#33FF57'], // Custom colors for better visibility
+            //colors: ['#FF5733', '#33FF57'], // Custom colors for better visibility
         }}
         
         width="100%"
-        height="400px"
+        height="350px"
       />
     </div>
   );
