@@ -36,6 +36,12 @@ export const options = {
   bars: 'vertical', // Ensures vertical bars
   vAxis: { title: 'Amount (Rs)' },
   hAxis: { title: 'Time Period' },
+  animation: {
+    startup: true, // Enable animation on startup
+    duration: 1000, // Animation duration in milliseconds
+    easing: 'out', // Easing type (can be 'in', 'out', or 'inAndOut')
+  },
+  isStacked: true,
   // Additional options can be added here
 };
 
