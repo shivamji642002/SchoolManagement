@@ -1,0 +1,25 @@
+.form-icon {
+    width: 100px;
+    height: auto;
+  }
+  
+  .progress {
+    height: 20px;
+  }
+  
+  .progress-bar {
+    transition: width 0.5s ease;
+  }
+  
+  #multiStepForm {
+    margin-top: 20px;
+  }
+  
+  #multiStepForm .form-group {
+    margin-bottom: 15px;
+  }
+  
+  #multiStepForm button {
+    width: 120px;
+  }
+  

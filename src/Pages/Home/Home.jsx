@@ -2,7 +2,8 @@ import React from 'react'
 import Header from '../../component/Header/Header'
 import Hero from '../../component/Hero/Hero'
 import  Dashboard from '../../component/Dashboard/Dashboard'
-import LineChart from '../../component/Charts/LineChart/LineChart'
+
+import BirthDay from '../../component/Birthday/Birthday'
 function Home() {
   return (
     
@@ -10,7 +11,9 @@ function Home() {
     <Header />
         <Hero/>
         <Dashboard/>
-          <LineChart/>
+          
+          <BirthDay/>
+
     </>
   )
 }

@@ -1,173 +1,121 @@
-@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100&display=swap");
-
-/* Basic resets */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  nav{
-    display: flex;
-  }
-  
-  
-  .navbar {
-    height: 80px;
-    display: flex;
-    justify-content:space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color:white;
-    border-radius: 3px;
-    
-    position: relative;
-  }
-  
-  .navbar-logo{
-    padding-top: 0%;
-    position: absolute;
-    left: 10px;
-    top: 8px;
-    
-  }
-  
-  .navbar-logo img {
-    height: 50px; /* Adjust logo size */
-    width: auto;  /* Maintain aspect ratio */
-  }
-  
-  .navbar-links-container {
-  
-    width: 100%; 
-    display: flex;
-    justify-content: center; /* Center the links */
-  }
-  .navbar-links{
-    list-style: none;
-    display: flex;
-    gap: 20px;
-  }
-  
-  .navbar-links li {
-    display: inline-block;
-    
-  }
-  
-  .navbar-links a {
-    text-decoration: none;
-    color: rgb(11, 2, 2);
-    font-size: 18px;
-    font-weight: 100;
-    padding: 8px 12px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .navbar-links  a:hover {
-    background-color: #16cbef;
-    border-radius: 4px;
-  }
- 
-  .Search{
-    border: black solid 2px;
-    height: 10%;
-    width: 2%;
-    justify-content: flex-end;
-  }
-  .Search:hover{
-    background-color: #16cbef;
-    border: 100%;
-  }
-  /* Search Icon Styling */
-.Search {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  width: 40px;
-  border: black 2px solid;
-  border-radius: 4px;
-  position: absolute;
-  right:200px; /* Position the search icon on the left side */
-  top: 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.notification{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  width: 40px;
-  border: black 2px solid;
-  border-radius: 4px;
-  position: absolute;
-  right:150px; /* Position the search icon on the left side */
-  top: 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-}
-.notification:hover{
-  background-color: #16cbef;
-  border: 100%;
-}
-.chat{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  width: 40px;
-  border: black 2px solid;
-  border-radius: 4px;
-  position: absolute;
-  right:100px; /* Position the search icon on the left side */
-  top: 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.chat:hover{
-  background-color: #16cbef;
-  border: 100%;
-}
-.book{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  width: 40px;
-  border: black 2px solid;
-  border-radius: 4px;
-  position: absolute;
-  right:50px; /* Position the search icon on the left side */
-  top: 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-}
-.book:hover{
-  background-color: #16cbef;
-  border: 100%;
+/* Base Styles for Mega Menu */
+.mega-menu {
+  margin-top: 60px;
+  display: none; /* Initially hidden */
+  position: fixed; /* Fixed positioning to overlay centered on the page */
+  top: 32%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  width: 40vw; /* Width of the menu */
+  max-height: 100vh; /* Limit height for overflow */
+  background-color: white; /* Background color */
+  padding: 10px; /* Padding around content */
+  box-shadow: 0 8px 16px rgba(0, 0, 0,0.1); /* Shadow for depth */
+  z-index: 999; /* Ensure it’s on top of other elements */
+  overflow-y: auto; /* Scroll if content overflows */
+  opacity: 0; /* Start invisible */
+  transform: translate(-50%, -50%) scale(0.95); /* Center and scale down */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth transition */
+  border-radius: 10px;
+  line-height: 4px;
 }
 
+.mega-menu.show {
+  display: flex; /* Flexbox for layout */
+  opacity: 1; /* Fade in */
+  transform: translate(-50%, -50%) scale(1); /* Scale to full size */
+  flex-direction: column; /* Ensure content stacks vertically */
+}
 
- /* Media query for mobile devices (responsive) */
-@media (max-width: 1200px) {
-  .navbar-logo{
-    width: 50px;
-    height: 20px;
-    
-  }
-  .navbar-links{
-    display: none;
-  }
-  }
+/* Mega Menu Layout */
+.menu-container {
+  display: flex; /* Use flexbox for layout */
+  justify-content: space-between; /* Space out sections */
+  flex-wrap: wrap; /* Allow wrapping */
+  gap: 1rem; /* Gap between sections */
+}
 
-  @media(max-width:600px){
-    .Search , .notification,.chat,.book {
-      display: none;
-    }
-    
-  }
+.logo{
+  text-decoration: none;
+}
 
+/* Menu section styling */
+.menu-section {
+  flex: 1 1 20%; /* Each section takes up 20% of the width */
+  min-width: 200px; /* Ensure sections don't collapse on small screens */
+  margin: 1rem; /* Space between sections */
+}
 
+.menu-section h3 {
+  font-size: 80px; /* Heading size */
+  margin-bottom: 2px; /* Space below heading */
+ /* Heading color */
+}
+
+.menu-section ul {
+  list-style: none; /* No bullet points */
+  padding: 0; /* No padding */
+  margin: 0; /* No margin */
+  color: none;
   
+}
+
+.menu-section ul li {
+  padding:  0; /* Space between list items */
+   /* Text color */
+  cursor: pointer; /* Pointer cursor for links */
+
+}
+
+.menu-section ul li:hover {
+  color: none; /* Change color on hover */
+  text-decoration: none; /* Underline on hover */
+}
+
+/* Responsive behavior */
+@media screen and (max-width: 768px) {
+  .mega-menu {
+    width: 90vw; /* Take more width on smaller screens */
+  }
+
+  .menu-container {
+    flex-direction: column; /* Stack sections vertically on small screens */
+  }
+
+  .menu-section {
+    flex: 1 1 100%; /* Full width on small screens */
+    margin: 0.5rem 0; /* Reduced margin */
+  }
+}
+
+/* Navbar styles */
+.navbar-links li a {
+  text-decoration: none; /* No underline */
+  color: #333; /* Link color */
+  font-size: 1rem; /* Font size */
+  font-weight: 500; /* Font weight */
+}
+
+ .navbar-links li a:hover {
+  color:none; /* Hover color */
+  text-decoration: none; /* No underline on hover */
+ } 
+
+/* Mobile styles */
+.hamburger {
+  display: none; /* Hide hamburger by default */
+  background: none; /* No background */
+  border: none; /* No border */
+  font-size: 2rem; /* Font size */
+  cursor: pointer; /* Pointer cursor */
+  color: #333; /* Color */
+}
+
+@media screen and (max-width: 992px) {
+  .hamburger {
+    display: block; /* Show hamburger on mobile */
+  }
+
+  .icons-container {
+    display: none; /* Hide icons on mobile */
+  }
+}

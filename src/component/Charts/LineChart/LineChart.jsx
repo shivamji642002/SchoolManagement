@@ -60,7 +60,7 @@ export default function LineChart() {
   const totalCollection = currentData.slice(1).reduce((acc, row) => acc + row[2], 0);
 
   return (
-    <div className="container border border-dark-subtle border-2 rounded mt-4 p-4">
+    <div className="container border border-dark-subtle border-2 rounded mt-4 p-4 mb-4">
       {/* Header Section with Title and Switch on the Same Row */}
       <div className="d-flex justify-content-between align-items-center border-bottom border-2 pb-3 mb-3">
         <h4 className="mb-0">Fee Collection & Expenses For 2021-2022</h4>
@@ -103,7 +103,7 @@ export default function LineChart() {
           title: isMonthWise
             ? "Company Performance (Month-wise)"
             : "Company Performance (Year-wise)",
-            //colors: ['#FF5733', '#33FF57'], // Custom colors for better visibility
+            colors: ['#133E87', '#FEEC37'], // Custom colors for better visibility
         }}
         
         width="100%"
