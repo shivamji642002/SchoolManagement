@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './Pages/Home/Home';
 import Reports from './Pages/Reports/Reports';
-import Settings from './pages/Settings/Settings';
+import Settings from './Pages/Settings/Settings.jsx';
 import Adimition from './Pages/Adimition/Adimition';
 import Master from './Pages/Master/master';
 import Finance from './Pages/Finance/Finance';

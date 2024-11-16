@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../../../component/Header/Header'
+import { Modal, Button } from 'react-bootstrap';
 
 function StudenRegistation() {
     const [formData, setFormData] = useState({
@@ -26,21 +27,79 @@ function StudenRegistation() {
         parentPhoto: null,
     });
 
+    const [errors, setErrors] = useState({});
+    const [showModal, setShowModal] = useState(false);
+
+    // Validate form data
+    const validate = () => {
+        const newErrors = {};
+        if (!formData.firstName) newErrors.firstName = 'First name is required';
+        if (!formData.lastName) newErrors.lastName = 'Last name is required';
+        if (!formData.email) newErrors.email = 'Email is required';
+        if (!formData.phoneNumber) newErrors.phoneNumber = 'Phone number is required';
+        if (!formData.dateOfBirth) newErrors.dateOfBirth = 'Date of birth is required';
+        return newErrors;
+    };
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
     };
-
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // Handle form submission   
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+        setErrors({});
+        try {
+            // Send the form data to the backend
+            const response = await fetch('http://localhost:5000/api/students', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
 
-        console.log(formData);
+            if (response.ok) {
+                alert('Student registered successfully!');
+                // Reset form data
+                setFormData({
+                    firstName: '',
+                    middleName: '',
+                    lastName: '',
+                    className: '',
+                    section: '',
+                    gender: '',
+                    dateOfBirth: '',
+                    rollNo: '',
+                    admissionNo: '',
+                    religion: '',
+                    email: '',
+                    fatherName: '',
+                    motherName: '',
+                    fatherOccupation: '',
+                    motherOccupation: '',
+                    phoneNumber: '',
+                    nationality: '',
+                    presentAddress: '',
+                    permanentAddress: '',
+                    studentPhoto: null,
+                    parentPhoto: null,
+                });
+            } else {
+                alert('Failed to register student.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        }
     };
+
     return (
         <>
             <Header></Header>
-            <div className="container  mt-5  ">
+            <div className="container  mt-5 " style={{ color:' #133E87' }}>
                 <div className=' p-0'>
                     <h4>Add Student</h4>
                 </div>
@@ -57,15 +116,16 @@ function StudenRegistation() {
                                     <label htmlFor="firstName" className="form-label">First Name</label>
                                     <input type="text" className="form-control"
                                         id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} />
+                                         {errors.firstName && <div className="text-danger">{errors.firstName}</div>}
                                 </div>
                             </div>
 
                             <div className="col-md-3">
                                 <div className="mb-3">
-                                    <label htmlFor="lastName" className="form-label">Middle Name</label>
+                                    <label htmlFor="middleName" className="form-label">Middle Name</label>
 
                                     <input type="text"
-                                        className="form-control" id="middleName" name="middleName" value={formData.lastName} onChange={handleChange} />
+                                        className="form-control" id="middleName" name="middleName" value={formData.middleName} onChange={handleChange} />
                                 </div>
                             </div>
 
@@ -75,6 +135,7 @@ function StudenRegistation() {
 
                                     <input type="text"
                                         className="form-control" id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} />
+                                        {errors.lastName && <div className="text-danger">{errors.lastName}</div>}
                                 </div>
                             </div>
 
@@ -145,7 +206,9 @@ function StudenRegistation() {
                                 <div className="mb-3">
                                     <label htmlFor="email" className="form-label">E-mail.</label>
                                     <input type="emsil" className="form-control" id="email" name="email" value={formData.email} onChange={handleChange}
+                                    
                                     />
+                                    {errors.email && <div className="text-danger">{errors.email}</div>}
                                 </div>
                             </div>
 
@@ -232,10 +295,54 @@ function StudenRegistation() {
                         
                         </div>
                         <button type="submit" className="btn btn-warning">Save</button>
-                        <button type="Reset" className="btn btn-primary ms-2 right">Reset</button>
+                        <button type="Reset" className="btn btn-primary ms-2 right" onClick={() => setFormData({
+                            firstName: '',
+                            middleName: '',
+                            lastName: '',
+                            className: '',
+                            section: '',
+                            gender: '',
+                            dateOfBirth: '',
+                            rollNo: '',
+                            admissionNo: '',
+                            religion: '',
+                            email: '',
+                            fatherName: '',
+                            motherName: '',
+                            fatherOccupation: '',
+                            motherOccupation: '',
+                            phoneNumber: '',
+                            nationality: '',
+                            presentAddress: '',
+                            permanentAddress: '',
+                            studentPhoto: null,
+                            parentPhoto: null,
+                        })}>Reset</button>
                     </form>
                 </div>
             </div>
+             {/* Modal for Form Data Confirmation */}
+             <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Review Student Information</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h5>Personal Information:</h5>
+                    <p><strong>First Name:</strong> {formData.firstName}</p>
+                    <p><strong>Middle Name:</strong> {formData.middleName}</p>
+                    <p><strong>Last Name:</strong> {formData.lastName}</p>
+                    <p><strong>Email:</strong> {formData.email}</p>
+                    {/* Add more fields to review */}
+                    <h5>Parent Information:</h5>
+                    <p><strong>Father's Name:</strong> {formData.fatherName}</p>
+                    <p><strong>Mother's Name:</strong> {formData.motherName}</p>
+                    {/* Add more parent information fields */}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>Edit</Button>
+                    <Button variant="primary" onClick={handleSubmit}>Submit</Button>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }
