@@ -1,0 +1,11 @@
+/* Position modal in the top-right corner */
+.top-right-modal .modal-dialog {
+    position: fixed;
+    top: 20px;   /* Adjust the top position as needed */
+    right: 20px; /* Adjust the right position as needed */
+    margin: 0;   /* Remove default margin */
+    max-width: 500px; /* Optional: Set max width */
+  }
+  
+  
+  

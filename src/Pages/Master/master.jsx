@@ -1,10 +1,8 @@
 import React from 'react';
 import './master.css';
-import logo from './eSchools (2).png';
-import { IoSearchSharp } from "react-icons/io5";
-import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Navbar from '../../component/Header/Header'
+import Sidebar from '../../component/Sidebar/Sidebar';
 
 const master = ({ children, extraFormFields }) => {
   return (
@@ -77,6 +75,7 @@ const master = ({ children, extraFormFields }) => {
           </div>
         )}
       </div>
+      
     </>
   );
 };

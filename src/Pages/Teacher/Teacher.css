@@ -22,3 +22,19 @@
     height: 20px;
   }
  
+  .custom-modal-width {
+    max-width: 90%; /* Adjust modal width as needed */
+    width: 90%;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1.5rem; /* Adds spacing between rows */
+  }
+  
+  .modal {
+    z-index: 1055 !important; /* Ensures the modal is on top */
+  }
+  
+  .modal-backdrop {
+    z-index: 1050 !important; /* Places backdrop behind the modal */
+  }
