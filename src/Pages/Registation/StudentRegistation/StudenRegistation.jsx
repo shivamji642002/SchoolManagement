@@ -37,23 +37,29 @@ function StudenRegistation() {
         email: '',
         bloodGroup: '',
         transport: '',
-        parentName: '',
         fatherName: '',
         fatherOccupation: '',
         fMobileNo: '',
         fEmail: '',
         motherName: '',
         motherOccupation: '',
-        phoneNumber: '',
-        mEmail: '',
+        motherNumber: '',
+        motherEmail: '',
+        parentName: '',
+        parentOccupation: '',
+        parentMobileNo: '',
+        parentEmail: '',
+        parentPhoto: '',
+        parentPhotoPreview: '',
         nationality: '',
         presentAddress: '',
         permanentAddress: '',
         studentPhoto: null,
-        parentPhoto: null,
-        studentPhotoPreview: null,
-        fatherPhotoPreview: null,
-        parentPhotoPreview: null,
+        studentPhotoPreview: "",
+        fatherPhoto: null,
+        fatherPhotoPreview: "",
+        motherPhoto: null,
+        motherPhotoPreview: "",
     });
 
     const [errors, setErrors] = useState({});
@@ -92,6 +98,11 @@ function StudenRegistation() {
         return newErrors;
     };
 
+
+    const countries = [
+         "Indian", "Other",
+       
+    ]
 
 
     const handleAddClass = () => {
@@ -135,8 +146,14 @@ function StudenRegistation() {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
     };
+
+
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -200,35 +217,91 @@ function StudenRegistation() {
         }
     };
 
-
-
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        const validExtensions = ['image/jpeg', 'image/jpg'];
-
-        if (file && validExtensions.includes(file.type)) {
-            setFileError(""); // Clear any previous error
-            const reader = new FileReader();
-            reader.onload = () => {
+    const handleFileChangeStudent = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const validExtensions = ['image/jpeg', 'image/jpg']; // Allowed MIME types
+            if (validExtensions.includes(file.type)) {
+                const previewURL = URL.createObjectURL(file);
                 setFormData({
                     ...formData,
                     studentPhoto: file,
-                    studentPhotoPreview: reader.result,
-                    fatherPhotoPreview: reader.result,
+                    studentPhotoPreview: previewURL,
                 });
+                setErrors({ ...errors, studentPhoto: null }); // Clear any previous error
+            } else {
+                setErrors({
+                    ...errors,
+                    studentPhoto: 'Please upload a valid .jpg or .jpeg file.'
+                });
+                setFormData({
+                    ...formData,
+                    studentPhoto: null,
+                    studentPhotoPreview: null,
+                });
+            }
+        }
+    };
+
+    const validateFile = (file) => {
+        if (!file) return "Photo is required.";
+        const validFileTypes = ["image/jpeg", "image/jpg"];
+        if (!validFileTypes.includes(file.type)) return "Only JPG and JPEG files are allowed.";
+        if (file.size > 2 * 1024 * 1024) return "File size should not exceed 2MB."; // Optional: size limit
+        return null;
+    };
+
+
+
+    const handleFileChange = (event) => {
+        const { name, files } = event.target;
+
+        if (files && files[0]) {
+            const fileReader = new FileReader();
+            fileReader.onload = () => {
+                setFormData((prevData) => ({
+                    ...prevData,
+                    [`${name}Preview`]: fileReader.result, // Generate preview dynamically
+                    [name]: files[0], // Store file
+                }));
             };
-            reader.readAsDataURL(file);
-        } else {
-            setFileError("Only JPG and JPEG files are allowed.");
-            setFormData({
-                ...formData,
-                studentPhoto: null,
-                studentPhotoPreview: null,
-            });
+            fileReader.readAsDataURL(files[0]);
         }
     };
 
 
+    const handleParentChoice = (event) => {
+        const { value } = event.target;
+        const updatedParentData = {
+            parentName: '',
+            parentOccupation: '',
+            parentMobileNo: '',
+            parentEmail: '',
+            parentPhotoPreview: '',
+        };
+
+        if (value === 'father') {
+            updatedParentData.parentName = formData.fatherName;
+            updatedParentData.parentOccupation = formData.fatherOccupation;
+            updatedParentData.parentMobileNo = formData.fMobileNo;
+            updatedParentData.parentEmail = formData.fEmail;
+            updatedParentData.parentPhotoPreview = formData.fatherPhotoPreview;
+        } else if (value === 'mother') {
+            updatedParentData.parentName = formData.motherName;
+            updatedParentData.parentOccupation = formData.motherOccupation;
+            updatedParentData.parentMobileNo = formData.motherNumber;
+            updatedParentData.parentEmail = formData.motherEmail;
+            updatedParentData.parentPhotoPreview = formData.motherPhotoPreview;
+        }
+
+        setFormData({
+            ...formData,
+            selectedParent: value,
+            ...updatedParentData,
+        });
+    };
+
+    console.log(handleSubmit);
 
     return (
         <>
@@ -507,32 +580,32 @@ function StudenRegistation() {
                             </div>
 
                             <div className="col-md-3">
-    <div className="mb-3">
-        <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
-        <div className="input-group">
-            <input
-                type="text" // Use text to enable custom placeholder
-                className="form-control"
-                id="dateOfBirth"
-                name="dateOfBirth"
-                placeholder="MM/DD/YYYY" // Custom placeholder
-                value={formData.dateOfBirth}
-                onFocus={(e) => (e.target.type = "date")} // Switch to date on focus
-                onBlur={(e) => {
-                    if (!e.target.value) e.target.type = "text"; // Switch back if no value
-                }}
-                onChange={handleChange}
-            />
-            <span
-                className="input-group-text"
-                onClick={() => document.getElementById("dateOfBirth").focus()} // Focus the input on icon click
-                style={{ cursor: "pointer" }}
-            >
-                <i className="bi bi-calendar-date"></i> {/* Bootstrap Icons */}
-            </span>
-        </div>
-    </div>
-</div>
+                                <div className="mb-3">
+                                    <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
+                                    <div className="input-group">
+                                        <input
+                                            type="text" // Use text to enable custom placeholder
+                                            className="form-control"
+                                            id="dateOfBirth"
+                                            name="dateOfBirth"
+                                            placeholder="MM/DD/YYYY" // Custom placeholder
+                                            value={formData.dateOfBirth}
+                                            onFocus={(e) => (e.target.type = "date")} // Switch to date on focus
+                                            onBlur={(e) => {
+                                                if (!e.target.value) e.target.type = "text"; // Switch back if no value
+                                            }}
+                                            onChange={handleChange}
+                                        />
+                                        <span
+                                            className="input-group-text"
+                                            onClick={() => document.getElementById("dateOfBirth").focus()} // Focus the input on icon click
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            <i className="bi bi-calendar-date"></i> {/* Bootstrap Icons */}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
@@ -651,38 +724,28 @@ function StudenRegistation() {
                                 </div>
                             </div>
 
+                            {/* Student Photo */}
                             <div className="col-md-3">
                                 <div className="mb-3">
-                                    <label htmlFor="studentPhoto" className="form-label">
-                                        Upload Student Photo (150px X 150px)
-                                    </label>
+                                    <label htmlFor="studentPhoto" className="form-label">Upload Student's Photo</label>
                                     <input
                                         type="file"
                                         className="form-control"
                                         id="studentPhoto"
                                         name="studentPhoto"
-                                        accept=".jpg, .jpeg" // Restrict selectable files to jpg and jpeg
-                                        onChange={handleFileChange}
+                                        onChange={handleFileChangeStudent}
                                     />
-                                    <div className="text-danger">  Support format : jpg / jpeg</div>
+                                    {errors.studentPhoto && <div className="text-danger">{errors.studentPhoto}</div>}
                                     {formData.studentPhotoPreview && (
                                         <img
                                             src={formData.studentPhotoPreview}
                                             alt="Student Preview"
                                             className="img-thumbnail mt-2"
-                                            style={{ width: '150px', height: '150px' }}
+                                            style={{ width: "150px", height: "150px" }}
                                         />
-                                    )}
-                                    {fileError && (
-                                        <div className="text-danger mt-2">
-                                            {fileError}
-                                        </div>
                                     )}
                                 </div>
                             </div>
-
-
-
                         </div>
                         <div className="row">
                             <h4>Parents information</h4>
@@ -691,25 +754,21 @@ function StudenRegistation() {
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="fatherName" className="form-label">Father's Name</label>
-                                    <input type="text" className="form-control" id="fatherName" name="fatherName" value={formData.fatherName} onChange={handleChange} />
+                                    <input type="text" className="form-control" id="fatherName" name="fatherName" placeholder='Father Name' value={formData.fatherName} onChange={handleChange} />
                                     {errors.fatherName && <div className="text-danger">{errors.fatherName}</div>}
                                 </div>
                             </div>
-
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="fatherOccupation" className="form-label">Father's Occupation</label>
-                                    <input type="text" className="form-control" id="fatherOccupation" name="fatherOccupation" value={formData.fatherOccupation} onChange={handleChange} />
+                                    <input type="text" className="form-control" id="fatherOccupation" placeholder='Father Occupation' name="fatherOccupation" value={formData.fatherOccupation} onChange={handleChange} />
                                 </div>
                             </div>
-
-
-
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="fMobileNo" className="form-label">Father's Mobile Number</label>
                                     <input type="tel"
-                                        className="form-control" id="fMobileNo" name="fMobileNo" value={formData.fMobileNo} onChange={handleChange} />
+                                        className="form-control" id="fMobileNo" name="fMobileNo" placeholder='Father Mobile Number' value={formData.fMobileNo} onChange={handleChange} />
                                 </div>
                             </div>
 
@@ -717,38 +776,37 @@ function StudenRegistation() {
                                 <div className="mb-3">
                                     <label htmlFor="fEmail" className="form-label">Father's Email</label>
                                     <input type="tel"
-                                        className="form-control" id="fEmail" name="fEmail" value={formData.fEmail} onChange={handleChange} />
+                                        className="form-control" id="fEmail" name="fEmail" placeholder='Father Email' value={formData.fEmail} onChange={handleChange} />
                                 </div>
                             </div>
+
+                            {/* Father Photo */}
                             <div className="col-md-3">
                                 <div className="mb-3">
-
-                                    <label htmlFor="Fnationality" className="form-label">Father's Nationality</label>
-                                    <input type="text" className="form-control" id="Fnationality" name="Fnationality" value={formData.Fnationality} onChange={handleChange} />
+                                    <label htmlFor="fatherPhoto" className="form-label">Upload Father's Photo</label>
+                                    <input
+                                        type="file"
+                                        className="form-control"
+                                        id="fatherPhoto"
+                                        name="fatherPhoto"
+                                        onChange={handleFileChange}
+                                    />
+                                    {errors.fatherPhoto && <div className="text-danger">{errors.fatherPhoto}</div>}
+                                    {/* {formData.fatherPhotoPreview && (
+                                        <img
+                                            src={formData.fatherPhotoPreview}
+                                            alt="Father Preview"
+                                            className="img-thumbnail mt-2"
+                                            style={{ width: "150px", height: "150px" }}
+                                        />
+                                    )} */}
                                 </div>
                             </div>
-
-                            <div className="col-md-3">
-                                <div className="mb-3">
-                                    <label htmlFor="FpresentAddress" className="form-label">Father's Present Address</label>
-                                    <textarea className="form-control" id="FpresentAddress" name="FpresentAddress" value={formData.FpresentAddress} onChange={handleChange}></textarea>
-                                </div>
-                            </div>
-
-                            <div className="col-md-3">
-                                <div className="mb-3">
-                                    <label htmlFor="FpermanentAddress" className="form-label">Father's Permanent Address</label>
-                                    <textarea className="form-control" id="FpermanentAddress" name="FpermanentAddress" value={formData.FpermanentAddress} onChange={handleChange}></textarea>
-                                </div>
-                            </div>
-
-
-
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="motherName" className="form-label">Mother's Name</label>
                                     <input type="text" className="form-control"
-                                        id="motherName" name="motherName" value={formData.motherName} onChange={handleChange} />
+                                        id="motherName" name="motherName" value={formData.motherName} placeholder='Mother Name' onChange={handleChange} />
                                     {errors.motherName && <div className="text-danger">{errors.motherName}</div>}
                                 </div>
                             </div>
@@ -756,81 +814,179 @@ function StudenRegistation() {
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="motherOccupation" className="form-label">Mother's Occupation</label>
-                                    <input type="text" className="form-control" id="motherOccupation" name="motherOccupation" value={formData.motherOccupation} onChange={handleChange} />
+                                    <input type="text" className="form-control" id="motherOccupation" name="motherOccupation" placeholder='Mother Occupation' value={formData.motherOccupation} onChange={handleChange} />
                                 </div>
                             </div>
 
                             <div className="col-md-3">
                                 <div className="mb-3">
-                                    <label htmlFor="phoneNumber" className="form-label">Mother's Mobile Number</label>
+                                    <label htmlFor="motherNumber" className="form-label">Mother's Mobile Number</label>
                                     <input type="tel"
-                                        className="form-control" id="phoneNumber" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
+                                        className="form-control" id="motherNumber" name="motherNumber" placeholder='Mother Mobile Number' value={formData.motherNumber} onChange={handleChange} />
                                 </div>
                             </div>
 
                             <div className="col-md-3">
                                 <div className="mb-3">
-                                    <label htmlFor="mEmail" className="form-label">Mother's Email</label>
+                                    <label htmlFor="motherEmail" className="form-label">Mother's Email</label>
                                     <input type="tel"
-                                        className="form-control" id="mEmail" name="mEmail" value={formData.mEmail} onChange={handleChange} />
+                                        className="form-control" id="motherEmail" name="motherEmail" placeholder='Mother Email' value={formData.motherEmail} onChange={handleChange} />
                                 </div>
                             </div>
-
+                            {/* Mother Photo */}
                             <div className="col-md-3">
                                 <div className="mb-3">
-
-                                    <label htmlFor="nationality" className="form-label">Nationality</label>
-                                    <input type="text" className="form-control" id="nationality" name="nationality" value={formData.nationality} onChange={handleChange} />
+                                    <label htmlFor="motherPhoto" className="form-label">Upload Mother's Photo</label>
+                                    <input
+                                        type="file"
+                                        className="form-control"
+                                        id="motherPhoto"
+                                        name="motherPhoto"
+                                        onChange={handleFileChange}
+                                    />
+                                    {errors.motherPhoto && <div className="text-danger">{errors.motherPhoto}</div>}
+                                    {/* {formData.motherPhotoPreview && (
+                                        <img
+                                            src={formData.motherPhotoPreview}
+                                            alt="Mother Preview"
+                                            className="img-thumbnail mt-2"
+                                            style={{ width: "150px", height: "150px" }}
+                                        />
+                                    )} */}
                                 </div>
                             </div>
-
                             <div className="col-md-3">
                                 <div className="mb-3">
-                                    <label htmlFor="presentAddress" className="form-label">Present Address</label>
-                                    <textarea className="form-control" id="presentAddress" name="presentAddress" value={formData.presentAddress} onChange={handleChange}></textarea>
+                                    <label htmlFor="selectedParent" className="form-label">Select Parent</label>
+                                    <select
+                                        className="form-select"
+                                        id="selectedParent"
+                                        name="selectedParent"
+                                        value={formData.selectedParent}
+                                        onChange={handleParentChoice}
+                                    >
+                                        <option value="">Select an option</option>
+                                        <option value="father">Father</option>
+                                        <option value="mother">Mother</option>
+                                        <option value="other">Other</option>
+                                    </select>
                                 </div>
                             </div>
-
-                            <div className="col-md-3">
-                                <div className="mb-3">
-                                    <label htmlFor="permanentAddress" className="form-label">Permanent Address</label>
-                                    <textarea className="form-control" id="permanentAddress" name="permanentAddress" value={formData.permanentAddress} onChange={handleChange}></textarea>
-                                </div>
-                            </div>
-
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="parentName" className="form-label">Parent's Name</label>
-                                    <input type="text" className="form-control"
-                                        id="parentName" name="parentName" value={formData.parentName} onChange={handleChange} />
-
+                                    <input
+                                        placeholder='Parent Name'
+                                        type="text"
+                                        className="form-control"
+                                        id="parentName"
+                                        name="parentName"
+                                        value={formData.parentName}
+                                        readOnly // Make it read-only to reflect selected parent
+                                    />
+                                </div>
+                            </div>
+                            <div className="col-md-3">
+                                <div className="mb-3">
+                                    <label htmlFor="parentOccupation" className="form-label">Parent's Occupation</label>
+                                    <input
+                                        placeholder='Parent Occupation'
+                                        type="text"
+                                        className="form-control"
+                                        id="parentOccupation"
+                                        name="parentOccupation"
+                                        value={formData.parentOccupation}
+                                        readOnly
+                                    />
+                                </div>
+                            </div>
+                            <div className="col-md-3">
+                                <div className="mb-3">
+                                    <label htmlFor="parentMobileNo" className="form-label">Parent's Mobile Number</label>
+                                    <input
+                                        placeholder='Parent Mobile Number'
+                                        type="text"
+                                        className="form-control"
+                                        id="parentMobileNo"
+                                        name="parentMobileNo"
+                                        value={formData.parentMobileNo}
+                                        readOnly
+                                    />
                                 </div>
                             </div>
 
+                            <div className="col-md-3">
+                                <div className="mb-3">
+                                    <label htmlFor="parentEmail" className="form-label">Parent's Email</label>
+                                    <input
+                                        placeholder='Parent Email'
+                                        type="text"
+                                        className="form-control"
+                                        id="parentEmail"
+                                        name="parentEmail"
+                                        value={formData.parentEmail}
+                                        readOnly
+                                    />
+                                </div>
+                            </div>
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="parentPhoto" className="form-label">Upload Parent Photo</label>
                                     <input
+
                                         type="file"
                                         className="form-control"
                                         id="parentPhoto"
                                         name="parentPhoto"
                                         onChange={handleFileChange}
                                     />
-                                    {formData.parentPhotoPreview && (
+                                    {errors.parentPhoto && <div className="text-danger">{errors.parentPhoto}</div>}
+                                    {/* {formData.parentPhotoPreview && (
                                         <img
                                             src={formData.parentPhotoPreview}
                                             alt="Parent Preview"
                                             className="img-thumbnail mt-2"
-                                            style={{ width: '150px', height: '150px' }}
+                                            style={{ width: "150px", height: "150px" }}
                                         />
-                                    )}
+                                    )} */}
+                                    <p className="mt-2">
+                                        <strong>Status:</strong> {formData.selectedParent === "father" ? "Father's Image" : formData.selectedParent === "mother" ? "Mother's Image" : "No Parent Selected"}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="col-md-3">
+                                <div className="mb-3">
+                                    <label htmlFor="nationality" className="form-label">Nationality</label>
+                                    <select
+                                        className="form-select"
+                                        id="nationality"
+                                        name="nationality"
+                                        value={formData.nationality}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="">Select Nationality</option>
+                                        {countries.map((country) => (
+                                            <option key={country} value={country}>
+                                                {country}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 
+                            <div className="col-md-3">
+                                <div className="mb-3">
+                                    <label htmlFor="presentAddress" className="form-label">Present Address</label>
+                                    <textarea className="form-control" id="presentAddress" name="presentAddress" placeholder='Present Address' value={formData.presentAddress} onChange={handleChange}></textarea>
+                                </div>
+                            </div>
 
-
-
+                            <div className="col-md-3">
+                                <div className="mb-3">
+                                    <label htmlFor="permanentAddress" className="form-label">Permanent Address</label>
+                                    <textarea className="form-control" id="permanentAddress" name="permanentAddress" placeholder='Permanent Address' value={formData.permanentAddress} onChange={handleChange}></textarea>
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" className="btn btn-warning" onClick={handleSubmit}>Save</button>
                         <button type="Reset" className="btn btn-primary ms-2 right" onClick={() => setFormData({

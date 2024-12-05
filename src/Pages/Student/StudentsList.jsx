@@ -20,6 +20,7 @@ const StudentsList = () => {
           ParentsName: 'Manoj Singh',
           Class: '10',
           Section: 'B',
+          house:'',
           Address: 'Sasaram, Rohtas',
           DateOfBirth: '05/02/2004',
           MobileNo: '+91 9110750977',
@@ -365,6 +366,7 @@ const StudentsList = () => {
                                             <th>Parents Name</th>
                                             <th>Class</th>
                                             <th>Section</th>
+                                            <th>House</th>
                                             <th>Address</th>
                                             <th>Date of Birth</th>
                                             <th>Mobile No</th>
@@ -393,6 +395,7 @@ const StudentsList = () => {
                                                 <td>{student.ParentsName}</td>
                                                 <td>{student.Class}</td>
                                                 <td>{student.Section}</td>
+                                                <td>{student.house}</td>
                                                 <td>{student.Address}</td>
                                                 <td>{student.DateOfBirth}</td>
                                                 <td>{student.MobileNo}</td>
