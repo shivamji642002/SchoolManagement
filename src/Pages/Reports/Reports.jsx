@@ -55,9 +55,6 @@ function Reports() {
                 </ul>
             </div>
         </nav>
-    
-    
-    
     </div>
   )
 }

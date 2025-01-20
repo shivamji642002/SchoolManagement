@@ -11,6 +11,7 @@ import Parent from './Pages/Parent/Parent';
 import ParentList from './Pages/Parent/ParentList';
 import TeacherRegistation from './Pages/Registation/StudentRegistation/TeacherRegistation.jsx';
 import StudentList from './Pages/Student/StudentsList.jsx';
+import  AttendenceList  from './Pages/AttendenceList/AttendenceList.jsx';
 import TeacherList from './Pages/Teacher/TeacherList.jsx'
 import { useState, useEffect } from 'react';
 
@@ -33,7 +34,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />} />
-          
+          <Route path='/attandance' element={<AttendenceList/>}/>
           <Route path='/adimition' element={<Adimition/>}/>
           <Route path='/StudentList' element={<StudentList/>}/>
           <Route path='/TeachertList' element={<TeacherList/>}/>

@@ -1,27 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './studentRegistration.css'
 import Header from '../../../component/Header/Header';
-import { Modal, Button, Form } from "react-bootstrap"
+import { Modal, Button, Form, Table } from "react-bootstrap"
 function StudenRegistation() {
-    // Initial data for classes and sections
-    // const classesAndSections = {
-    //     "Class 1": ["Section A", "Section B", "Section C"],
-    //     "Class 2": ["Section D", "Section E", "Section F"],
-    //     "Class 3": ["Section G", "Section H", "Section I"],
-    // };
-
-    // // Initial data for classes and sections
-    // const classesAndHouse = {
-    //     "Class 1": ["house A", "house  B", "house  C"],
-    //     "Class 2": ["house  D", "house  E", "house  F"],
-    //     "Class 3": ["house  G", "house  H", "house  I"],
-    // };
-
 
     const [formData, setFormData] = useState({
-        firstName: '',
-        middleName: '',
-        lastName: '',
+        firstName: '', middleName: '', lastName: '',
         className: '',
         section: '',
         gender: '',
@@ -60,6 +45,8 @@ function StudenRegistation() {
         fatherPhotoPreview: "",
         motherPhoto: null,
         motherPhotoPreview: "",
+        parentPhoto: null,
+        parentPhotoPreview: "",
     });
 
     const [errors, setErrors] = useState({});
@@ -72,18 +59,23 @@ function StudenRegistation() {
     const [remarks, setRemarks] = useState("");
 
     const [classes, setClasses] = useState(["Class 1", "Class 2", "Class 3"]);
+    const [section, setSection] = useState(["Section A", "Section B", "Section C"]);
+    const [house, setHouse] = useState(["Tagore", "Raman", "Bose","Teresa"]);
     const [classesAndSections, setClassesAndSections] = useState({});
     const [classesAndHouse, setClassesAndHouse] = useState({});
+    const [students, setStudents] = useState([]);
 
-    // const handleSectionChange = (e) => {
-    //     const selectedSection = e.target.value;
-    //     setFormData({ ...formData, section: selectedSection });
-    // };
+    // Fetch all students when the component mounts
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/students')
+            .then(response => {
+                setStudents(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching students:', error);
+            });
+    }, []);
 
-    // const handleHouseChange = (e) => {
-    //     const selectedHouse = e.target.value;
-    //     setFormData({ ...formData, house: selectedHouse });
-    // }
 
     // Validate form data
     const validate = () => {
@@ -99,10 +91,7 @@ function StudenRegistation() {
     };
 
 
-    const countries = [
-         "Indian", "Other",
-       
-    ]
+    const countries = ["Indian", "Other",]
 
 
     const handleAddClass = () => {
@@ -110,6 +99,7 @@ function StudenRegistation() {
         if (newClass.trim() === "") return;
 
         setClasses((prev) => [...prev, newClass]);
+        setSection((prev) => [...prev, newSection]);
         setClassesAndSections((prev) => ({ ...prev, [newClass]: [] }));
         setClassesAndHouse((prev) => ({ ...prev, [newClass]: [] }));
 
@@ -120,6 +110,8 @@ function StudenRegistation() {
 
     const handleAddSection = () => {
         // Add the new section for the selected class
+        
+        
         if (!formData.className || newSection.trim() === "") return;
 
         setClassesAndSections((prev) => ({
@@ -144,76 +136,83 @@ function StudenRegistation() {
         setShowModal(false); // Close modal
     };
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const validationErrors = validate();
-        if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
-            return;
-        }
-
+        // Create FormData object to include files and other form data
         const formDataToSend = new FormData();
         Object.keys(formData).forEach((key) => {
-            if (formData[key] instanceof File) {
-                formDataToSend.append(key, formData[key]);
-            } else {
-                formDataToSend.append(key, formData[key]);
-            }
+            formDataToSend.append(key, formData[key]);
         });
 
         try {
-            const response = await fetch('http://localhost:5000/api/students', {
-                method: 'POST',
-                body: formDataToSend,
+            // POST request to send student data to the backend
+            const postResponse = await axios.post('http://localhost:5000/api/students', formDataToSend, {
+                headers: { 'Content-Type': 'multipart/form-data' },
             });
 
-            if (response.ok) {
-                setShowSuccessModal(true);
-                setFormData({
-                    firstName: '',
-                    middleName: '',
-                    lastName: '',
-                    className: '',
-                    section: '',
-                    gender: '',
-                    studentType: '',
-                    dateOfBirth: '',
-                    rollNo: '',
-                    admissionNo: '',
-                    mobileNo: '',
-                    religion: '',
-                    email: '',
-                    parentName: '',
-                    fatherName: '',
-                    motherName: '',
-                    fatherOccupation: '',
-                    motherOccupation: '',
-                    phoneNumber: '',
-                    nationality: '',
-                    presentAddress: '',
-                    permanentAddress: '',
-                    studentPhoto: null,
-                    parentPhoto: null,
-                    studentPhotoPreview: null,
-                    parentPhotoPreview: null,
-                });
-            } else {
-                alert('Failed to register student.');
+            if (postResponse.status === 201) {
+                alert('Student registered successfully!');
             }
+
+            // Fetch the updated students list after successful registration
+            const getResponse = await axios.get('http://localhost:5000/api/students');
+            setStudents(getResponse.data); // Assuming `setStudents` updates the list of students in your UI
+
+            // Reset form data
+            setFormData({
+                firstName: '',
+                middleName: '',
+                lastName: '',
+                className: '',
+                section: '',
+                gender: '',
+                studentType: '',
+                dateOfBirth: '',
+                rollNo: '',
+                admissionNo: '',
+                mobileNo: '',
+                AlternativeMobileNo: '',
+                house: '',
+                religion: '',
+                cast: '',
+                email: '',
+                bloodGroup: '',
+                transport: '',
+                fatherName: '',
+                fatherOccupation: '',
+                fMobileNo: '',
+                fEmail: '',
+                motherName: '',
+                motherOccupation: '',
+                motherNumber: '',
+                motherEmail: '',
+                parentName: '',
+                parentOccupation: '',
+                parentMobileNo: '',
+                parentEmail: '',
+                parentPhoto: '',
+                parentPhotoPreview: '',
+                nationality: '',
+                presentAddress: '',
+                permanentAddress: '',
+                studentPhoto: null,
+                studentPhotoPreview: "",
+                fatherPhoto: null,
+                fatherPhotoPreview: "",
+                motherPhoto: null,
+                motherPhotoPreview: "",
+                parentPhoto: null,
+                parentPhotoPreview: "",
+            });
         } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred. Please try again.');
+            console.error('Error registering student:', error.response?.data || error.message);
+            alert('Error registering student.');
         }
     };
 
@@ -252,53 +251,64 @@ function StudenRegistation() {
     };
 
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        const { name } = e.target; // Identifies the field name dynamically
 
-    const handleFileChange = (event) => {
-        const { name, files } = event.target;
-
-        if (files && files[0]) {
-            const fileReader = new FileReader();
-            fileReader.onload = () => {
+        if (file) {
+            const validExtensions = ['image/jpeg', 'image/jpg', 'image/png']; // Allowed file types
+            if (validExtensions.includes(file.type)) {
+                const previewURL = URL.createObjectURL(file); // Generate a preview URL
                 setFormData((prevData) => ({
                     ...prevData,
-                    [`${name}Preview`]: fileReader.result, // Generate preview dynamically
-                    [name]: files[0], // Store file
+                    [name]: file, // Dynamically set the correct file field
+                    [`${name}Preview`]: previewURL, // Update the corresponding preview field
                 }));
-            };
-            fileReader.readAsDataURL(files[0]);
+                setErrors((prevErrors) => ({ ...prevErrors, [name]: null })); // Clear any error for this field
+            } else {
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    [name]: 'Please upload a valid .jpg, .jpeg, or .png file.',
+                }));
+            }
         }
     };
 
 
     const handleParentChoice = (event) => {
         const { value } = event.target;
-        const updatedParentData = {
-            parentName: '',
-            parentOccupation: '',
-            parentMobileNo: '',
-            parentEmail: '',
-            parentPhotoPreview: '',
-        };
 
-        if (value === 'father') {
-            updatedParentData.parentName = formData.fatherName;
-            updatedParentData.parentOccupation = formData.fatherOccupation;
-            updatedParentData.parentMobileNo = formData.fMobileNo;
-            updatedParentData.parentEmail = formData.fEmail;
-            updatedParentData.parentPhotoPreview = formData.fatherPhotoPreview;
-        } else if (value === 'mother') {
-            updatedParentData.parentName = formData.motherName;
-            updatedParentData.parentOccupation = formData.motherOccupation;
-            updatedParentData.parentMobileNo = formData.motherNumber;
-            updatedParentData.parentEmail = formData.motherEmail;
-            updatedParentData.parentPhotoPreview = formData.motherPhotoPreview;
+        if (value === "father") {
+            setFormData({
+                ...formData,
+                selectedParent: value,
+                parentName: formData.fatherName || "",
+                parentOccupation: formData.fatherOccupation || "",
+                parentMobileNo: formData.fMobileNo || "",
+                parentEmail: formData.fEmail || "",
+                parentPhotoPreview: formData.fatherPhotoPreview || "",
+            });
+        } else if (value === "mother") {
+            setFormData({
+                ...formData,
+                selectedParent: value,
+                parentName: formData.motherName || "",
+                parentOccupation: formData.motherOccupation || "",
+                parentMobileNo: formData.motherMobileNo || "",
+                parentEmail: formData.motherEmail || "",
+                parentPhotoPreview: formData.motherPhotoPreview || "",
+            });
+        } else if (value === "other") {
+            setFormData({
+                ...formData,
+                selectedParent: value,
+                parentName: "",
+                parentOccupation: "",
+                parentMobileNo: "",
+                parentEmail: "",
+                parentPhotoPreview: null,
+            });
         }
-
-        setFormData({
-            ...formData,
-            selectedParent: value,
-            ...updatedParentData,
-        });
     };
 
     console.log(handleSubmit);
@@ -320,8 +330,8 @@ function StudenRegistation() {
                         <div className="row">
                             <div className="col-md-4">
                                 <div className="mb-4">
-                                    <label htmlFor="firstName" className="form-label">First Name</label>
-                                    <input type="text" className="form-control"
+                                    <label htmlFor="firstName" className="form-label" >First Name</label>
+                                    <input type="text" className="form-control" required
                                         id="firstName" name="firstName" placeholder='First Name' value={formData.firstName} onChange={handleChange} />
                                     {errors.firstName && <div className="text-danger">{errors.firstName}</div>}
                                 </div>
@@ -555,12 +565,11 @@ function StudenRegistation() {
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="studentType" className="form-label">Student Type</label>
-                                    <select className="form-select" id="gender" name="gender"
+                                    <select className="form-select" id="studentType" name="studentType"
                                         value={formData.studentType} onChange={handleChange}>
                                         <option value="">Select Student Type</option>
-                                        <option value="Male">Hosteler</option>
-                                        <option value="Female">Scholar</option>
-
+                                        <option value="Hosteler">Hosteler</option>
+                                        <option value="Scholar">Scholar</option>
                                         <option value="Other">Other</option>
                                     </select>
                                 </div>
@@ -580,33 +589,22 @@ function StudenRegistation() {
                             </div>
 
                             <div className="col-md-3">
-                                <div className="mb-3">
-                                    <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
-                                    <div className="input-group">
-                                        <input
-                                            type="text" // Use text to enable custom placeholder
-                                            className="form-control"
-                                            id="dateOfBirth"
-                                            name="dateOfBirth"
-                                            placeholder="MM/DD/YYYY" // Custom placeholder
-                                            value={formData.dateOfBirth}
-                                            onFocus={(e) => (e.target.type = "date")} // Switch to date on focus
-                                            onBlur={(e) => {
-                                                if (!e.target.value) e.target.type = "text"; // Switch back if no value
-                                            }}
-                                            onChange={handleChange}
-                                        />
-                                        <span
-                                            className="input-group-text"
-                                            onClick={() => document.getElementById("dateOfBirth").focus()} // Focus the input on icon click
-                                            style={{ cursor: "pointer" }}
-                                        >
-                                            <i className="bi bi-calendar-date"></i> {/* Bootstrap Icons */}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
+    <div className="mb-3">
+        <label htmlFor="dateOfBirth" className="form-label">Date of Birth</label>
+        <div className="input-group">
+            <input
+                type="date"
+                className="form-control"
+                id="dateOfBirth"
+                name="dateOfBirth"
+                value={formData.dateOfBirth}
+                onChange={handleChange}
+                onKeyDown={(e) => e.preventDefault()} // Prevent manual typing
+            />
+            
+        </div>
+    </div>
+</div>
 
 
 
@@ -733,19 +731,11 @@ function StudenRegistation() {
                                         className="form-control"
                                         id="studentPhoto"
                                         name="studentPhoto"
-                                        onChange={handleFileChangeStudent}
+                                        onChange={handleFileChange}
                                     />
-                                    {errors.studentPhoto && <div className="text-danger">{errors.studentPhoto}</div>}
-                                    {formData.studentPhotoPreview && (
-                                        <img
-                                            src={formData.studentPhotoPreview}
-                                            alt="Student Preview"
-                                            className="img-thumbnail mt-2"
-                                            style={{ width: "150px", height: "150px" }}
-                                        />
-                                    )}
                                 </div>
                             </div>
+
                         </div>
                         <div className="row">
                             <h4>Parents information</h4>
@@ -792,14 +782,14 @@ function StudenRegistation() {
                                         onChange={handleFileChange}
                                     />
                                     {errors.fatherPhoto && <div className="text-danger">{errors.fatherPhoto}</div>}
-                                    {/* {formData.fatherPhotoPreview && (
+                                    {formData.fatherPhotoPreview && (
                                         <img
                                             src={formData.fatherPhotoPreview}
                                             alt="Father Preview"
                                             className="img-thumbnail mt-2"
                                             style={{ width: "150px", height: "150px" }}
                                         />
-                                    )} */}
+                                    )}
                                 </div>
                             </div>
                             <div className="col-md-3">
@@ -845,16 +835,17 @@ function StudenRegistation() {
                                         onChange={handleFileChange}
                                     />
                                     {errors.motherPhoto && <div className="text-danger">{errors.motherPhoto}</div>}
-                                    {/* {formData.motherPhotoPreview && (
+                                    {formData.motherPhotoPreview && (
                                         <img
                                             src={formData.motherPhotoPreview}
                                             alt="Mother Preview"
                                             className="img-thumbnail mt-2"
                                             style={{ width: "150px", height: "150px" }}
                                         />
-                                    )} */}
+                                    )}
                                 </div>
                             </div>
+
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="selectedParent" className="form-label">Select Parent</label>
@@ -876,41 +867,46 @@ function StudenRegistation() {
                                 <div className="mb-3">
                                     <label htmlFor="parentName" className="form-label">Parent's Name</label>
                                     <input
-                                        placeholder='Parent Name'
+                                        placeholder="Parent Name"
                                         type="text"
                                         className="form-control"
                                         id="parentName"
                                         name="parentName"
                                         value={formData.parentName}
-                                        readOnly // Make it read-only to reflect selected parent
+                                        onChange={handleChange}
+                                        readOnly={formData.selectedParent !== "other"} // Editable only for "Other"
                                     />
                                 </div>
                             </div>
+
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="parentOccupation" className="form-label">Parent's Occupation</label>
                                     <input
-                                        placeholder='Parent Occupation'
+                                        placeholder="Parent Occupation"
                                         type="text"
                                         className="form-control"
                                         id="parentOccupation"
                                         name="parentOccupation"
                                         value={formData.parentOccupation}
-                                        readOnly
+                                        onChange={handleChange}
+                                        readOnly={formData.selectedParent !== "other"} // Editable only for "Other"
                                     />
                                 </div>
                             </div>
+
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="parentMobileNo" className="form-label">Parent's Mobile Number</label>
                                     <input
-                                        placeholder='Parent Mobile Number'
+                                        placeholder="Parent Mobile Number"
                                         type="text"
                                         className="form-control"
                                         id="parentMobileNo"
                                         name="parentMobileNo"
                                         value={formData.parentMobileNo}
-                                        readOnly
+                                        onChange={handleChange}
+                                        readOnly={formData.selectedParent !== "other"} // Editable only for "Other"
                                     />
                                 </div>
                             </div>
@@ -919,41 +915,43 @@ function StudenRegistation() {
                                 <div className="mb-3">
                                     <label htmlFor="parentEmail" className="form-label">Parent's Email</label>
                                     <input
-                                        placeholder='Parent Email'
-                                        type="text"
+                                        placeholder="Parent Email"
+                                        type="email"
                                         className="form-control"
                                         id="parentEmail"
                                         name="parentEmail"
                                         value={formData.parentEmail}
-                                        readOnly
+                                        onChange={handleChange}
+                                        readOnly={formData.selectedParent !== "other"} // Editable only for "Other"
                                     />
                                 </div>
                             </div>
+
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="parentPhoto" className="form-label">Upload Parent Photo</label>
                                     <input
-
                                         type="file"
                                         className="form-control"
                                         id="parentPhoto"
                                         name="parentPhoto"
-                                        onChange={handleFileChange}
+                                        onChange={handleFileChange} // Dynamic handler for all photo uploads
                                     />
                                     {errors.parentPhoto && <div className="text-danger">{errors.parentPhoto}</div>}
-                                    {/* {formData.parentPhotoPreview && (
+                                    {formData.parentPhotoPreview && (
                                         <img
                                             src={formData.parentPhotoPreview}
                                             alt="Parent Preview"
                                             className="img-thumbnail mt-2"
                                             style={{ width: "150px", height: "150px" }}
                                         />
-                                    )} */}
+                                    )}
                                     <p className="mt-2">
                                         <strong>Status:</strong> {formData.selectedParent === "father" ? "Father's Image" : formData.selectedParent === "mother" ? "Mother's Image" : "No Parent Selected"}
                                     </p>
                                 </div>
                             </div>
+
                             <div className="col-md-3">
                                 <div className="mb-3">
                                     <label htmlFor="nationality" className="form-label">Nationality</label>
@@ -988,7 +986,8 @@ function StudenRegistation() {
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" className="btn btn-warning" onClick={handleSubmit}>Save</button>
+                        <button type="submit" className="btn btn-warning" >Save</button>
+
                         <button type="Reset" className="btn btn-primary ms-2 right" onClick={() => setFormData({
                             firstName: '',
                             middleName: '',
@@ -1015,6 +1014,131 @@ function StudenRegistation() {
                     </form >
                 </div >
             </div >
+
+            {/* <h3 className="mt-4">All Students</h3>
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Middle Name</th>
+                        <th>Last Name</th>
+                        <th>Class</th>
+                        <th>Section</th>
+                        <th>Gender</th>
+                        <th>Student Type</th>
+                        <th>Date of Birth</th>
+                        <th>Roll No</th>
+                        <th>Admission No</th>
+                        <th>Mobile No</th>
+                        <th>Alternative Mobile No</th>
+                        <th>House</th>
+                        <th>Religion</th>
+                        <th>Cast</th>
+                        <th>Email</th>
+                        <th>Blood Group</th>
+                        <th>Transport</th>
+                        <th>Father's Name</th>
+                        <th>Father's Occupation</th>
+                        <th>Father's Mobile No</th>
+                        <th>Father's Email</th>
+                        <th>Mother's Name</th>
+                        <th>Mother's Occupation</th>
+                        <th>Mother's Mobile No</th>
+                        <th>Mother's Email</th>
+                        <th>Parent's Name</th>
+                        <th>Parent's Occupation</th>
+                        <th>Parent's Mobile No</th>
+                        <th>Parent's Email</th>
+                        <th>Parent Photo</th>
+                        <th>Nationality</th>
+                        <th>Present Address</th>
+                        <th>Permanent Address</th>
+                        <th>Student Photo</th>
+                        <th>Father Photo</th>
+                        <th>Mother Photo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {students.map(student => (
+                        <tr key={student._id}>
+                            <td>{student.firstName}</td>
+                            <td>{student.middleName}</td>
+                            <td>{student.lastName}</td>
+                            <td>{student.className}</td>
+                            <td>{student.section}</td>
+                            <td>{student.gender}</td>
+                            <td>{student.studentType}</td>
+                            <td>{student.dateOfBirth}</td>
+                            <td>{student.rollNo}</td>
+                            <td>{student.admissionNo}</td>
+                            <td>{student.mobileNo}</td>
+                            <td>{student.AlternativeMobileNo}</td>
+                            <td>{student.house}</td>
+                            <td>{student.religion}</td>
+                            <td>{student.cast}</td>
+                            <td>{student.email}</td>
+                            <td>{student.bloodGroup}</td>
+                            <td>{student.transport}</td>
+                            <td>{student.fatherName}</td>
+                            <td>{student.fatherOccupation}</td>
+                            <td>{student.fMobileNo}</td>
+                            <td>{student.fEmail}</td>
+                            <td>{student.motherName}</td>
+                            <td>{student.motherOccupation}</td>
+                            <td>{student.motherNumber}</td>
+                            <td>{student.motherEmail}</td>
+                            <td>{student.parentName}</td>
+                            <td>{student.parentOccupation}</td>
+                            <td>{student.parentMobileNo}</td>
+                            <td>{student.parentEmail}</td>
+                            <td>
+                                {student.parentPhoto && (
+                                    <img
+                                        src={`http://localhost:5000/${student.parentPhoto}`}
+                                        alt="Parent Preview"
+                                        className="img-thumbnail"
+                                        style={{ width: "50px", height: "50px" }}
+                                    />
+                                )}
+                            </td>
+                            <td>{student.nationality}</td>
+                            <td>{student.presentAddress}</td>
+                            <td>{student.permanentAddress}</td>
+                            <td>
+                                {student.studentPhoto && (
+                                    <img
+                                        src={`http://localhost:5000/${student.studentPhoto}`}
+                                        alt="Student Photo"
+                                        className="img-thumbnail"
+                                        style={{ width: "50px", height: "50px" }}
+                                    />
+                                )}
+                            </td>
+                            <td>
+                                {student.fatherPhoto && (
+                                    <img
+                                        src={`http://localhost:5000/${student.fatherPhoto}`}
+                                        alt="Father Photo"
+                                        className="img-thumbnail"
+                                        style={{ width: "50px", height: "50px" }}
+                                    />
+                                )}
+                            </td>
+                            <td>
+                                {student.motherPhoto && (
+                                    <img
+                                        src={`http://localhost:5000/${student.motherPhoto}`}
+                                        alt="Mother Photo"
+                                        className="img-thumbnail"
+                                        style={{ width: "50px", height: "50px" }}
+                                    />
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table> */}
+
 
 
         </>

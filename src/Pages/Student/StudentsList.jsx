@@ -2,173 +2,174 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from '../../component/Header/Header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Modal , Form,Row, Col } from 'react-bootstrap';
+import { Button, Modal, Form, Row, Col } from 'react-bootstrap';
 import '../../Pages/Parent/ParentList.css';
 import { faPlus, faEye, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import * as XLSX from 'xlsx';
 
 const StudentsList = () => {
 
 
 
     const [studentData, setStudentData] = useState([
-       
+
         {
-          Roll: '10290',
-          Photo: 'https://randomuser.me/api/portraits/men/5.jpg',
-          Name: 'Jhon Singh',
-          Gender: 'male',
-          ParentsName: 'Manoj Singh',
-          Class: '10',
-          Section: 'B',
-          house:'',
-          Address: 'Sasaram, Rohtas',
-          DateOfBirth: '05/02/2004',
-          MobileNo: '+91 9110750977',
-          Email: 'jhon.singh@gmail.com'
+            Roll: '10290',
+            Photo: 'https://randomuser.me/api/portraits/men/5.jpg',
+            Name: 'Jhon Singh',
+            Gender: 'male',
+            ParentsName: 'Manoj Singh',
+            Class: '10',
+            Section: 'B',
+            house: '',
+            Address: 'Sasaram, Rohtas',
+            DateOfBirth: '05/02/2004',
+            MobileNo: '+91 9110750977',
+            Email: 'jhon.singh@gmail.com'
         },
         {
-          Roll: '10291',
-          Photo: 'https://randomuser.me/api/portraits/women/10.jpg',
-          Name: 'Priya Sharma',
-          Gender: 'female',
-          ParentsName: 'Rajesh Sharma',
-          Class: '10',
-          Section: 'A',
-          Address: 'Patna, Bihar',
-          DateOfBirth: '15/08/2004',
-          MobileNo: '+91 9876543210',
-          Email: 'priya.sharma@example.com'
+            Roll: '10291',
+            Photo: 'https://randomuser.me/api/portraits/women/10.jpg',
+            Name: 'Priya Sharma',
+            Gender: 'female',
+            ParentsName: 'Rajesh Sharma',
+            Class: '10',
+            Section: 'A',
+            Address: 'Patna, Bihar',
+            DateOfBirth: '15/08/2004',
+            MobileNo: '+91 9876543210',
+            Email: 'priya.sharma@example.com'
         },
         {
-          Roll: '10292',
-          Photo: 'https://randomuser.me/api/portraits/men/15.jpg',
-          Name: 'Aman Verma',
-          Gender: 'male',
-          ParentsName: 'Suresh Verma',
-          Class: '10',
-          Section: 'C',
-          Address: 'Gaya, Bihar',
-          DateOfBirth: '12/03/2004',
-          MobileNo: '+91 9123456789',
-          Email: 'aman.verma@example.com'
+            Roll: '10292',
+            Photo: 'https://randomuser.me/api/portraits/men/15.jpg',
+            Name: 'Aman Verma',
+            Gender: 'male',
+            ParentsName: 'Suresh Verma',
+            Class: '10',
+            Section: 'C',
+            Address: 'Gaya, Bihar',
+            DateOfBirth: '12/03/2004',
+            MobileNo: '+91 9123456789',
+            Email: 'aman.verma@example.com'
         },
         {
-          Roll: '10293',
-          Photo: 'https://randomuser.me/api/portraits/women/22.jpg',
-          Name: 'Nikita Das',
-          Gender: 'female',
-          ParentsName: 'Anil Das',
-          Class: '10',
-          Section: 'B',
-          Address: 'Darbhanga, Bihar',
-          DateOfBirth: '24/05/2004',
-          MobileNo: '+91 9134567890',
-          Email: 'nikita.das@example.com'
+            Roll: '10293',
+            Photo: 'https://randomuser.me/api/portraits/women/22.jpg',
+            Name: 'Nikita Das',
+            Gender: 'female',
+            ParentsName: 'Anil Das',
+            Class: '10',
+            Section: 'B',
+            Address: 'Darbhanga, Bihar',
+            DateOfBirth: '24/05/2004',
+            MobileNo: '+91 9134567890',
+            Email: 'nikita.das@example.com'
         },
         {
-          Roll: '10294',
-          Photo: 'https://randomuser.me/api/portraits/men/25.jpg',
-          Name: 'Rohan Gupta',
-          Gender: 'male',
-          ParentsName: 'Vikas Gupta',
-          Class: '10',
-          Section: 'A',
-          Address: 'Muzaffarpur, Bihar',
-          DateOfBirth: '30/01/2004',
-          MobileNo: '+91 9145678901',
-          Email: 'rohan.gupta@example.com'
+            Roll: '10294',
+            Photo: 'https://randomuser.me/api/portraits/men/25.jpg',
+            Name: 'Rohan Gupta',
+            Gender: 'male',
+            ParentsName: 'Vikas Gupta',
+            Class: '10',
+            Section: 'A',
+            Address: 'Muzaffarpur, Bihar',
+            DateOfBirth: '30/01/2004',
+            MobileNo: '+91 9145678901',
+            Email: 'rohan.gupta@example.com'
         },
         {
-          Roll: '10295',
-          Photo: 'https://randomuser.me/api/portraits/women/35.jpg',
-          Name: 'Pooja Singh',
-          Gender: 'female',
-          ParentsName: 'Kamal Singh',
-          Class: '10',
-          Section: 'C',
-          Address: 'Bhagalpur, Bihar',
-          DateOfBirth: '18/11/2004',
-          MobileNo: '+91 9156789012',
-          Email: 'pooja.singh@example.com'
+            Roll: '10295',
+            Photo: 'https://randomuser.me/api/portraits/women/35.jpg',
+            Name: 'Pooja Singh',
+            Gender: 'female',
+            ParentsName: 'Kamal Singh',
+            Class: '10',
+            Section: 'C',
+            Address: 'Bhagalpur, Bihar',
+            DateOfBirth: '18/11/2004',
+            MobileNo: '+91 9156789012',
+            Email: 'pooja.singh@example.com'
         },
         {
-          Roll: '10296',
-          Photo: 'https://randomuser.me/api/portraits/men/40.jpg',
-          Name: 'Ravi Kumar',
-          Gender: 'male',
-          ParentsName: 'Mahesh Kumar',
-          Class: '10',
-          Section: 'B',
-          Address: 'Purnea, Bihar',
-          DateOfBirth: '22/07/2004',
-          MobileNo: '+91 9167890123',
-          Email: 'ravi.kumar@example.com'
+            Roll: '10296',
+            Photo: 'https://randomuser.me/api/portraits/men/40.jpg',
+            Name: 'Ravi Kumar',
+            Gender: 'male',
+            ParentsName: 'Mahesh Kumar',
+            Class: '10',
+            Section: 'B',
+            Address: 'Purnea, Bihar',
+            DateOfBirth: '22/07/2004',
+            MobileNo: '+91 9167890123',
+            Email: 'ravi.kumar@example.com'
         },
         {
-          Roll: '10297',
-          Photo: 'https://randomuser.me/api/portraits/women/45.jpg',
-          Name: 'Sneha Roy',
-          Gender: 'female',
-          ParentsName: 'Naresh Roy',
-          Class: '10',
-          Section: 'A',
-          Address: 'Chapra, Bihar',
-          DateOfBirth: '02/09/2004',
-          MobileNo: '+91 9178901234',
-          Email: 'sneha.roy@example.com'
+            Roll: '10297',
+            Photo: 'https://randomuser.me/api/portraits/women/45.jpg',
+            Name: 'Sneha Roy',
+            Gender: 'female',
+            ParentsName: 'Naresh Roy',
+            Class: '10',
+            Section: 'A',
+            Address: 'Chapra, Bihar',
+            DateOfBirth: '02/09/2004',
+            MobileNo: '+91 9178901234',
+            Email: 'sneha.roy@example.com'
         },
         {
-          Roll: '10298',
-          Photo: 'https://randomuser.me/api/portraits/men/50.jpg',
-          Name: 'Arjun Mehta',
-          Gender: 'male',
-          ParentsName: 'Rajesh Mehta',
-          Class: '10',
-          Section: 'C',
-          Address: 'Ara, Bihar',
-          DateOfBirth: '08/04/2004',
-          MobileNo: '+91 9189012345',
-          Email: 'arjun.mehta@example.com'
+            Roll: '10298',
+            Photo: 'https://randomuser.me/api/portraits/men/50.jpg',
+            Name: 'Arjun Mehta',
+            Gender: 'male',
+            ParentsName: 'Rajesh Mehta',
+            Class: '10',
+            Section: 'C',
+            Address: 'Ara, Bihar',
+            DateOfBirth: '08/04/2004',
+            MobileNo: '+91 9189012345',
+            Email: 'arjun.mehta@example.com'
         },
         {
-          Roll: '10299',
-          Photo: 'https://randomuser.me/api/portraits/women/55.jpg',
-          Name: 'Anjali Yadav',
-          Gender: 'female',
-          ParentsName: 'Ashok Yadav',
-          Class: '10',
-          Section: 'B',
-          Address: 'Hajipur, Bihar',
-          DateOfBirth: '10/06/2004',
-          MobileNo: '+91 9190123456',
-          Email: 'anjali.yadav@example.com'
+            Roll: '10299',
+            Photo: 'https://randomuser.me/api/portraits/women/55.jpg',
+            Name: 'Anjali Yadav',
+            Gender: 'female',
+            ParentsName: 'Ashok Yadav',
+            Class: '10',
+            Section: 'B',
+            Address: 'Hajipur, Bihar',
+            DateOfBirth: '10/06/2004',
+            MobileNo: '+91 9190123456',
+            Email: 'anjali.yadav@example.com'
         },
         {
-          Roll: '10300',
-          Photo: 'https://randomuser.me/api/portraits/men/60.jpg',
-          Name: 'Vikash Thakur',
-          Gender: 'male',
-          ParentsName: 'Ramesh Thakur',
-          Class: '10',
-          Section: 'A',
-          Address: 'Samastipur, Bihar',
-          DateOfBirth: '14/12/2004',
-          MobileNo: '+91 9201234567',
-          Email: 'vikash.thakur@example.com'
+            Roll: '10300',
+            Photo: 'https://randomuser.me/api/portraits/men/60.jpg',
+            Name: 'Vikash Thakur',
+            Gender: 'male',
+            ParentsName: 'Ramesh Thakur',
+            Class: '10',
+            Section: 'A',
+            Address: 'Samastipur, Bihar',
+            DateOfBirth: '14/12/2004',
+            MobileNo: '+91 9201234567',
+            Email: 'vikash.thakur@example.com'
         },
         {
-          Roll: '10301',
-          Photo: 'https://randomuser.me/api/portraits/women/65.jpg',
-          Name: 'Kajal Pandey',
-          Gender: 'female',
-          ParentsName: 'Dinesh Pandey',
-          Class: '10',
-          Section: 'C',
-          Address: 'Madhubani, Bihar',
-          DateOfBirth: '19/01/2004',
-          MobileNo: '+91 9212345678',
-          Email: 'kajal.pandey@example.com'
-      
+            Roll: '10301',
+            Photo: 'https://randomuser.me/api/portraits/women/65.jpg',
+            Name: 'Kajal Pandey',
+            Gender: 'female',
+            ParentsName: 'Dinesh Pandey',
+            Class: '10',
+            Section: 'C',
+            Address: 'Madhubani, Bihar',
+            DateOfBirth: '19/01/2004',
+            MobileNo: '+91 9212345678',
+            Email: 'kajal.pandey@example.com'
+
             //  Action:'',            
         },
 
@@ -187,7 +188,7 @@ const StudentsList = () => {
         setSearchTerm(e.target.value);
     };
 
-    
+
 
     // Search modal start 
     const filteredStudent = studentData.filter((student) => {
@@ -271,6 +272,26 @@ const StudentsList = () => {
         setIsEditing(false);  // Set editing state to false (for adding)
         setShowConfirmModal(true);  // Show confirmation modal
     };
+     // Export to Excel
+     const handleExportToExcel = () => {
+        const exportData = studentData.map((student) => ({
+            Roll: student.Roll,
+            Name: student.Name,
+            Gender: student.Gender,
+            ParentsName: student.ParentsName,
+            Class: student.Class,
+            Section: student.Section,
+            Address: student.Address,
+            DateOfBirth: student.DateOfBirth,
+            MobileNo: student.MobileNo,
+            Email: student.Email,
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(exportData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Students');
+        XLSX.writeFile(workbook, 'StudentsList.xlsx');
+    };
 
     // Add a new Student after confirmation
     const handleAddTeacherRecord = () => {
@@ -332,27 +353,38 @@ const StudentsList = () => {
                         <div className="card">
                             <div className="card-header pb-2">
                                 All Students List
-                                <div className='d-flex justify-content-between'>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    {/* Search Section */}
                                     <div className="d-flex">
-                                        <input type="text" className="form-control" placeholder="Type Roll no, Name, Mobile Number..." onChange={handleSearch} />
-                                        {/* <select className="form-select mx-2" onChange={handleFilterTypeChange}>
-                                            <option value="">Filter by</option>
-                                            <option value="ID">Roll</option>
-                                            <option value="Name">Name</option>
-                                            <option value="Mobile No">Mobile No</option>
-                                        </select> */}
-                                        {/* <input type="text" className="form-control" placeholder="Filter Value" onChange={handleFilterValueChange} /> */}
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Type Roll no, Name, Mobile Number..."
+                                            onChange={handleSearch}
+                                        />
                                         <button className="btn btn-primary mx-2">Search</button>
                                     </div>
-                                    <Button
-                                        variant="success"
-                                        onClick={() => setShowAddModal(true)}
-                                    >
-                                        <FontAwesomeIcon icon={faPlus} /> Add Student
-                                    </Button>
-                                </div>
 
+                                    {/* Buttons Section */}
+                                    <div className="d-flex justify-content-end">
+                                        <Button
+                                            variant="success"
+                                            className="me-2"
+                                            onClick={() => setShowAddModal(true)}
+                                        >
+                                            <FontAwesomeIcon icon={faPlus} /> Add Student
+                                        </Button>
+                                        <Button
+                                            variant="secondary"
+                                            className="btn btn-sm"
+                                            onClick={handleExportToExcel}
+                                        >
+                                            <i className="bi bi-printer"></i> Print Report
+                                        </Button>
+                                    </div>
+                                </div>
                             </div>
+
 
                             <div className="card-body ">
                                 <table className="table table-striped">
@@ -379,7 +411,7 @@ const StudentsList = () => {
                                             <tr key={index}>
                                                 <td><input type="checkbox" /></td>
 
-                                                
+
                                                 <td>{student.Roll}</td>
                                                 <td><div className="circle-container">
                                                     <img
@@ -400,29 +432,30 @@ const StudentsList = () => {
                                                 <td>{student.DateOfBirth}</td>
                                                 <td>{student.MobileNo}</td>
                                                 <td>{student.Email}</td>
-                                            
+
                                                 <td>
                                                     <Button
                                                         variant="primary"
-                                                        className='btn btn-sm'
+                                                        className="btn btn-sm w-100"
                                                         onClick={() => handleShow(student)}
                                                     >
                                                         <FontAwesomeIcon icon={faEye} /> View
                                                     </Button>
                                                     <Button
                                                         variant="warning"
-                                                        className='btn btn-sm m-1'
+                                                        className="btn btn-sm mt-1 mb-1 w-100"
                                                         onClick={() => handleEdit(student)}
                                                     >
                                                         <FontAwesomeIcon icon={faEdit} /> Edit
                                                     </Button>
                                                     <Button
                                                         variant="danger"
-                                                        className='btn btn-sm'
+                                                        className="btn btn-sm w-100"
                                                         onClick={() => handleDelete(student)}
                                                     >
                                                         <FontAwesomeIcon icon={faTrash} /> Delete
                                                     </Button>
+
                                                 </td>
                                             </tr>
                                         ))}
@@ -563,7 +596,7 @@ const StudentsList = () => {
                                     />
                                 </Form.Group>
                             </Col>
-                           
+
                             <Col md={3}>
                                 <Form.Group>
                                     <Form.Label>Photo URL</Form.Label>
@@ -606,109 +639,109 @@ const StudentsList = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-           
+
 
             {/* View Student Details Modal */}
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Student Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedStudent && (
-            <div className="d-flex">
-              <div className="d-inline m-4">
-                <p>Roll: {selectedStudent.Roll}</p>
-                <p>Name : {selectedStudent.Name}</p>
-                <p>Gender : {selectedStudent.Gender}</p>
-                <p>Parents Name : {selectedStudent.ParentsName}</p>
-                <p>Class : {selectedStudent.Class}</p>
-                <p>Section : {selectedStudent.Section}</p>
-                <p>Address : {selectedStudent.Address}</p>
-                <p>Date Of Birth : {selectedStudent.DateOfBirth}</p>
-                <p>MobileNo : {selectedStudent.MobileNo}</p>
-                <p>Email : {selectedStudent.Email}</p>
-              </div>
-              <div className="d-inline mt-4 p-4">
-                <img
-                  src={selectedStudent.Photo}
-                  alt="Teacher Photo"
-                  width={'150px'}
-                  height={'150px'}
-                />
-              </div>
-            </div>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      
-      <Modal
-        show={showConfirmModal}
-        onHide={() => setShowConfirmModal(false)}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Confirmation</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure want to {isEditing ? 'edit' : 'add'} this student record ?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
-            Cancel
-          </Button>
-          <Button
-            variant="primary"
-            onClick={() => {
-              if (isEditing) {
-                handleSaveTeacher(); // Call the save function for editing
-              } else {
-                handleAddTeacherRecord(); // Call the add function for adding a new teacher
-              }
-              setShowConfirmModal(false); // Close the confirmation modal
-            }}
-          >
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal
-        show={showDeleteConfirmModal}
-        onHide={() => setShowDeleteConfirmModal(false)}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Delete Confirmation</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure want to delete the student <strong>{studentToDelete?.Name}</strong>?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteConfirmModal(false)}>
-            Cancel
-          </Button>
-          <Button
-            variant="danger"
-            onClick={() => {
-              handleDeleteStudent(); // Call the delete function
-              setShowDeleteConfirmModal(false); // Close the delete modal
-            }}
-          >
-            Delete
-          </Button>
-        </Modal.Footer>
-      </Modal>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Student Details</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedStudent && (
+                        <div className="d-flex">
+                            <div className="d-inline m-4">
+                                <p>Roll: {selectedStudent.Roll}</p>
+                                <p>Name : {selectedStudent.Name}</p>
+                                <p>Gender : {selectedStudent.Gender}</p>
+                                <p>Parents Name : {selectedStudent.ParentsName}</p>
+                                <p>Class : {selectedStudent.Class}</p>
+                                <p>Section : {selectedStudent.Section}</p>
+                                <p>Address : {selectedStudent.Address}</p>
+                                <p>Date Of Birth : {selectedStudent.DateOfBirth}</p>
+                                <p>MobileNo : {selectedStudent.MobileNo}</p>
+                                <p>Email : {selectedStudent.Email}</p>
+                            </div>
+                            <div className="d-inline mt-4 p-4">
+                                <img
+                                    src={selectedStudent.Photo}
+                                    alt="Teacher Photo"
+                                    width={'150px'}
+                                    height={'150px'}
+                                />
+                            </div>
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
 
+            <Modal
+                show={showConfirmModal}
+                onHide={() => setShowConfirmModal(false)}
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirmation</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Are you sure want to {isEditing ? 'edit' : 'add'} this student record ?</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={() => {
+                            if (isEditing) {
+                                handleSaveTeacher(); // Call the save function for editing
+                            } else {
+                                handleAddTeacherRecord(); // Call the add function for adding a new teacher
+                            }
+                            setShowConfirmModal(false); // Close the confirmation modal
+                        }}
+                    >
+                        Confirm
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
-           
-                       
+            <Modal
+                show={showDeleteConfirmModal}
+                onHide={() => setShowDeleteConfirmModal(false)}
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Delete Confirmation</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Are you sure want to delete the student <strong>{studentToDelete?.Name}</strong>?</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowDeleteConfirmModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="danger"
+                        onClick={() => {
+                            handleDeleteStudent(); // Call the delete function
+                            setShowDeleteConfirmModal(false); // Close the delete modal
+                        }}
+                    >
+                        Delete
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+
+
+
+
         </>
     );
 };

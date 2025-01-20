@@ -67,6 +67,71 @@ const Sidebar = () => {
           </p>
         </div>
       </div>
+      /* <nav className="navbar shadow container-fluid sticky-sm-top">
+        <div className='navbar-logo pt-1'>
+          <NavLink to='/'>
+            <img src={logo} alt="Campus365 Logo" className='navbar-logo ms-2 w-4' />
+          </NavLink>
+        </div>
+
+        {/* mobile view button */}
+        <button className="hamburger" onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} aria-expanded={isMobileMenuOpen}>
+          <i className={isMobileMenuOpen ? "bi bi-x-lg" : "bi bi-list"}></i>
+        </button>
+
+        {/* navbar Link */}
+        <div className={`navbar-links-container  ${isMobileMenuOpen ? 'show' : ''}`}>
+          <ul className="navbar-links pt-2">
+            {menuData.map((menu, index) => (
+              <li className="dropdown" key={index}>
+                <NavLink to="#" onClick={() => toggleDropdown(index)} aria-expanded={isDropdownOpen === index}>
+                  <span>{menu.title} {menu.icons}</span>
+                </NavLink>
+
+                {isDropdownOpen === index && (
+                  <div className="dropdown-content mega-menu show">
+                    <div className="menu-container mt-0">
+                      {menu.sections.map((section, secIndex) => (
+                        <div className="menu-section" key={secIndex}>
+                          <h5>{section.title}</h5>
+                          <ul>
+                            {section.items.map((item, itemIndex) => (
+                              <li key={itemIndex}>
+                                <NavLink to={item.link}>{item.name}</NavLink></li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </li>
+            ))}
+            <li className="dark"> <a href="#">Report</a></li>
+            <li className="dark"><a href="#">Setting</a></li>
+            
+          </ul>
+        </div>
+
+        {/* Icons and Search */}
+
+        <div className="icons-container">
+          <div className='Search mt-2'>
+            <a href="#" aria-label="Search"><i className="bi bi-search" style={{ color: '#133E87' }}></i></a>
+          </div>
+          <div className='notification mt-2'>
+            <a href="#" aria-label="Notifications"><i className="bi bi-bell-fill" style={{ color: '#133E87' }}></i></a>
+          </div>
+          <div className='chat mt-2'>
+            <a href="#" aria-label="Chat"><i className="bi bi-chat-right-dots-fill" style={{ color: '#133E87' }}></i></a>
+          </div>
+          <div className='book mt-2'>
+            <a href="#" aria-label="Books"><i className="bi bi-book-half" style={{ color: '#133E87' }}></i></a>
+          </div>
+
+        </div>
+
+      </nav>  */
     </div>
   );
 };

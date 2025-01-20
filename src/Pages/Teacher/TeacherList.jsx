@@ -307,9 +307,6 @@ const TeacherList = () => {
     setImagePreview(null);
   };
 
-
-
-
   return (
     <>
       <Header />
